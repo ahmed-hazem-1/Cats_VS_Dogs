@@ -4,6 +4,6 @@ pillow>=9.5.0
 scikit-learn>=1.2.2
 pandas>=1.5.3
 matplotlib>=3.7.1
-tensorflow
+tensorflow==2.18.0
 # tensorflow-cpu is not compatible with Python 3.13.3 on Streamlit Cloud
 # we'll handle this in the app code
