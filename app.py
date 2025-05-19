@@ -31,8 +31,8 @@ def load_model():
 
 def preprocess_image(image):
     """Preprocess the image for model prediction"""
-    # Convert to grayscale
-    img = image.convert('L')
+    # Convert to RGB
+    img = image.convert('RGB')
     # Resize to 128x128
     img = img.resize((128, 128))
     # Convert to numpy array
@@ -40,7 +40,7 @@ def preprocess_image(image):
     # Normalize pixel values
     img_array = img_array.astype('float32') / 255.0
     # Reshape for model input
-    img_array = np.reshape(img_array, (1, 128, 128, 1))
+    img_array = np.reshape(img_array, (1, 128, 128, 3))
     return img_array
 
 # Main app
@@ -59,7 +59,7 @@ if uploaded_file is not None:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        st.image(image, caption="Uploaded Image", use_container_width=True)
     
     # Preprocess the image and make prediction
     processed_image = preprocess_image(image)
@@ -93,7 +93,7 @@ st.sidebar.info(
     """
     This app uses a CNN model trained on the Microsoft Cats vs Dogs dataset.
     
-    The model was trained to distinguish between images of cats and dogs with grayscale images.
+    The model was trained to distinguish between images of cats and dogs with RGB images.
     
     Upload a picture to see if the model correctly identifies it!
     """
