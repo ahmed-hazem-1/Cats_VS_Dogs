@@ -69,19 +69,22 @@ if uploaded_file is not None:
         if model is not None:
             try:
                 prediction = model.predict(processed_image)
-                confidence = float(prediction[0][0])
+                # For softmax output: prediction[0] will be [cat_prob, dog_prob]
+                cat_probability = prediction[0][0]
+                dog_probability = prediction[0][1]
                 
                 # Display results
-                if confidence > 0.5:
-                    result = f"Dog (Confidence: {confidence:.2%})"
+                if dog_probability > cat_probability:
+                    result = f"Dog (Confidence: {dog_probability:.2%})"
                     st.success(result)
                 else:
-                    result = f"Cat (Confidence: {(1-confidence):.2%})"
+                    result = f"Cat (Confidence: {cat_probability:.2%})"
                     st.success(result)
                 
-                # Show prediction gauge
+                # Show prediction gauge with the higher confidence value
                 st.write("Prediction Confidence:")
-                st.progress(confidence if confidence > 0.5 else 1-confidence)
+                confidence = max(cat_probability, dog_probability)
+                st.progress(confidence)
             except Exception as e:
                 st.error(f"Error during prediction: {str(e)}")
         else:
