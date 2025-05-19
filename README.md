@@ -1,17 +1,29 @@
-# Cat vs Dog Classifier App
+# Cat vs Dog Classifier
 
 This Streamlit app allows you to upload an image of a cat or dog and uses a trained CNN model to predict which animal it is.
 
-## Setup
+## Online Demo
 
-1. Install the required dependencies:
+The online demo on Streamlit Cloud runs in a limited mode because TensorFlow is not compatible with the Python 3.13 environment used by Streamlit Cloud.
+
+## Local Setup
+
+For full functionality with model predictions, run this app locally:
+
+1. Clone this repository:
    ```
-   pip install -r requirements.txt
+   git clone https://github.com/your-username/cats_vs_dogs.git
+   cd cats_vs_dogs
    ```
 
-2. Make sure the model file (`model_v2.h5`) is in the same directory as the app.py file.
+2. Install the required dependencies:
+   ```
+   pip install streamlit tensorflow numpy pillow
+   ```
 
-3. Run the Streamlit app:
+3. Make sure the model file (`model_v2.h5`) is in the same directory as the app.py file.
+
+4. Run the Streamlit app:
    ```
    streamlit run app.py
    ```
@@ -26,6 +38,9 @@ This Streamlit app allows you to upload an image of a cat or dog and uses a trai
    - Passed through the model for prediction
 3. The app displays the prediction result along with the confidence level.
 
-## Model Architecture
+## Model Information
 
-The model uses a deep CNN architecture with several convolutional layers, batch normalization, max pooling, and dropout for regularization.
+- The model was created in Google Colab using TensorFlow
+- CNN architecture with multiple convolutional layers
+- Trained on grayscale images (128x128 pixels)
+- Binary classification: cat vs dog
