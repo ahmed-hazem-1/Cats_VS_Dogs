@@ -69,10 +69,14 @@ if uploaded_file is not None:
         if model is not None:
             try:
                 prediction = model.predict(processed_image)
-                # For softmax output: prediction[0] will be [cat_prob, dog_prob]
-                # Convert NumPy float32 to Python float
-                cat_probability = float(prediction[0][0])
-                dog_probability = float(prediction[0][1])
+                
+                # Debug information to understand the prediction values
+                st.write("Raw prediction values:", prediction)
+                
+                # For softmax output: prediction[0] will be [dog_prob, cat_prob] 
+                # (swapping our understanding of the indices)
+                dog_probability = float(prediction[0][0])
+                cat_probability = float(prediction[0][1])
                 
                 # Display results
                 if dog_probability > cat_probability:
