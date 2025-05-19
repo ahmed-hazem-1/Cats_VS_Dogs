@@ -70,15 +70,20 @@ if uploaded_file is not None:
             try:
                 prediction = model.predict(processed_image)
                 
-                # Debug information to understand the prediction values
+                # Enhanced debugging information
+                st.write("Raw prediction shape:", prediction.shape)
                 st.write("Raw prediction values:", prediction)
                 
-                # For softmax output: prediction[0] will be [dog_prob, cat_prob] 
-                # (swapping our understanding of the indices)
-                dog_probability = float(prediction[0][0])
-                cat_probability = float(prediction[0][1])
+                # Check if we need to interpret indices differently
+                # Try flipping the interpretation of the indices
+                cat_probability = float(prediction[0][0])
+                dog_probability = float(prediction[0][1])
                 
-                # Display results
+                st.write("Interpreted as:")
+                st.write(f"- Class 0 (Cat) probability: {cat_probability:.4f}")
+                st.write(f"- Class 1 (Dog) probability: {dog_probability:.4f}")
+                
+                # Display results with flipped interpretation
                 if dog_probability > cat_probability:
                     result = f"Dog (Confidence: {dog_probability:.2%})"
                     st.success(result)
