@@ -1,9 +1,8 @@
 import streamlit as st
-import tensorflow as tf
 import numpy as np
-import cv2
 from PIL import Image
 import io
+import os
 
 # Set page configuration
 st.set_page_config(page_title="Cat vs Dog Classifier", page_icon="🐱🐶")
@@ -12,8 +11,24 @@ st.set_page_config(page_title="Cat vs Dog Classifier", page_icon="🐱🐶")
 def load_model():
     """Load the pre-trained model"""
     try:
-        model = tf.keras.models.load_model('model_v2.h5')
-        return model
+        # First try to import tensorflow
+        import tensorflow as tf
+        # Set memory growth to avoid memory allocation issues
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        if gpus:
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+        
+        # Check if model file exists
+        if os.path.exists('model_v2.h5'):
+            model = tf.keras.models.load_model('model_v2.h5')
+            return model
+        else:
+            st.error("Model file 'model_v2.h5' not found.")
+            return None
+    except ImportError:
+        st.error("TensorFlow could not be imported. Please check installation.")
+        return None
     except Exception as e:
         st.error(f"Error loading model: {e}")
         return None
@@ -56,22 +71,25 @@ if uploaded_file is not None:
     with col2:
         st.write("Processing...")
         if model is not None:
-            prediction = model.predict(processed_image)
-            confidence = float(prediction[0][0])
-            
-            # Display results
-            if confidence > 0.5:
-                result = f"Dog (Confidence: {confidence:.2%})"
-                st.success(result)
-            else:
-                result = f"Cat (Confidence: {(1-confidence):.2%})"
-                st.success(result)
-            
-            # Show prediction gauge
-            st.write("Prediction Confidence:")
-            st.progress(confidence if confidence > 0.5 else 1-confidence)
+            try:
+                prediction = model.predict(processed_image)
+                confidence = float(prediction[0][0])
+                
+                # Display results
+                if confidence > 0.5:
+                    result = f"Dog (Confidence: {confidence:.2%})"
+                    st.success(result)
+                else:
+                    result = f"Cat (Confidence: {(1-confidence):.2%})"
+                    st.success(result)
+                
+                # Show prediction gauge
+                st.write("Prediction Confidence:")
+                st.progress(confidence if confidence > 0.5 else 1-confidence)
+            except Exception as e:
+                st.error(f"Error during prediction: {str(e)}")
         else:
-            st.error("Model could not be loaded. Please check if the model file exists.")
+            st.error("Model could not be loaded. Please check the logs for details.")
 
 # Add instructions on how to run the app
 st.sidebar.title("About")
@@ -88,3 +106,33 @@ st.sidebar.info(
 # How to run instructions
 st.sidebar.title("How to Run")
 st.sidebar.code("streamlit run app.py")
+
+# Add troubleshooting info
+st.sidebar.title("Troubleshooting")
+st.sidebar.info(
+    """
+    If you encounter issues with the model loading:
+    
+    1. Make sure the model file (model_v2.h5) is in the same directory as the app.py file
+    2. Check that TensorFlow is properly installed
+    3. For models created in Google Colab:
+       - Ensure the TensorFlow version used for deployment is compatible with the version used in Colab
+       - If needed, use the 'tf.keras.models.load_model()' with custom_objects parameter for custom layers
+       - Consider using SavedModel format instead of .h5 for better compatibility
+    4. Try refreshing the page
+    """
+)
+
+# Add Colab model info
+st.sidebar.title("Model Information")
+st.sidebar.info(
+    """
+    This model was trained in Google Colab using:
+    - TensorFlow deep learning framework
+    - Convolutional Neural Network (CNN) architecture
+    - Grayscale images (128x128)
+    - Microsoft Cats vs Dogs dataset
+    
+    For best results, use clear images of cats or dogs with good lighting.
+    """
+)
