@@ -113,17 +113,17 @@ st.sidebar.info(
 )
 
 # How to run instructions
-st.sidebar.title("How to Run")
-st.sidebar.code("streamlit run app.py")
+# st.sidebar.title("How to Run")
+# st.sidebar.code("streamlit run app.py")
 
-# Add troubleshooting info
-st.sidebar.title("Troubleshooting")
-st.sidebar.info(
-    """
-    If you encounter issues with the model loading:
+# # Add troubleshooting info
+# st.sidebar.title("Troubleshooting")
+# st.sidebar.info(
+#     """
+#     If you encounter issues with the model loading:
     
-    1. Make sure the model file (model_v2.h5) is in the same directory as the app.py file
-    2. Check that TensorFlow is properly installed
-    3. Try refreshing the page
-    """
-)
+#     1. Make sure the model file (model_v2.h5) is in the same directory as the app.py file
+#     2. Check that TensorFlow is properly installed
+#     3. Try refreshing the page
+#     """
+# )
