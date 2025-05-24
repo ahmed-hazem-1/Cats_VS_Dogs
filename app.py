@@ -61,29 +61,27 @@ if uploaded_file is not None:
     # Preprocess the image and make prediction
     processed_image = preprocess_image(image)
     
-    st.write("Processing...")
     if model is not None:
         try:
             prediction = model.predict(processed_image)
             
-            # # Enhanced debugging information
-            # st.write("Raw prediction shape:", prediction.shape)
-            # st.write("Raw prediction values:", prediction)
-            
             # Check if we need to interpret indices differently
-            # Try flipping the interpretation of the indices
             cat_probability = float(prediction[0][0])
             dog_probability = float(prediction[0][1])
             
             # Display results with flipped interpretation
             if dog_probability > cat_probability:
+                # Show descriptive text with larger font first
+                st.header("It's a cute Dog! Look at those loyal eyes. 🐶")
+                st.write("Processing...")
                 result = f"Dog (Confidence: {dog_probability:.2%})"
                 st.success(result)
-                st.write("It's a cute Dog! Look at those loyal eyes. 🐶")
             else:
+                # Show descriptive text with larger font first
+                st.header("It's a pretty Cat! Such a majestic feline. 🐱")
+                st.write("Processing...")
                 result = f"Cat (Confidence: {cat_probability:.2%})"
                 st.success(result)
-                st.write("It's a pretty Cat! Such a majestic feline. 🐱")
             
             # Show prediction gauge with the higher confidence value
             st.write("Prediction Confidence:")
