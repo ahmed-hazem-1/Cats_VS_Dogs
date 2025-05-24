@@ -56,49 +56,43 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 if uploaded_file is not None:
     # Display the uploaded image
     image = Image.open(uploaded_file)
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.image(image, caption="Uploaded Image", use_container_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
     
     # Preprocess the image and make prediction
     processed_image = preprocess_image(image)
     
-    with col2:
-        st.write("Processing...")
-        if model is not None:
-            try:
-                prediction = model.predict(processed_image)
-                
-                # # Enhanced debugging information
-                # st.write("Raw prediction shape:", prediction.shape)
-                # st.write("Raw prediction values:", prediction)
-                
-                # Check if we need to interpret indices differently
-                # Try flipping the interpretation of the indices
-                cat_probability = float(prediction[0][0])
-                dog_probability = float(prediction[0][1])
-                
-                # st.write("Interpreted as:")
-                # st.write(f"- Class 0 (Cat) probability: {cat_probability:.4f}")
-                # st.write(f"- Class 1 (Dog) probability: {dog_probability:.4f}")
-                
-                # Display results with flipped interpretation
-                if dog_probability > cat_probability:
-                    result = f"Dog (Confidence: {dog_probability:.2%})"
-                    st.success(result)
-                else:
-                    result = f"Cat (Confidence: {cat_probability:.2%})"
-                    st.success(result)
-                
-                # Show prediction gauge with the higher confidence value
-                st.write("Prediction Confidence:")
-                confidence = max(cat_probability, dog_probability)
-                st.progress(confidence)
-            except Exception as e:
-                st.error(f"Error during prediction: {str(e)}")
-        else:
-            st.error("Model could not be loaded. Please check the logs for details.")
+    st.write("Processing...")
+    if model is not None:
+        try:
+            prediction = model.predict(processed_image)
+            
+            # # Enhanced debugging information
+            # st.write("Raw prediction shape:", prediction.shape)
+            # st.write("Raw prediction values:", prediction)
+            
+            # Check if we need to interpret indices differently
+            # Try flipping the interpretation of the indices
+            cat_probability = float(prediction[0][0])
+            dog_probability = float(prediction[0][1])
+            
+            # Display results with flipped interpretation
+            if dog_probability > cat_probability:
+                result = f"Dog (Confidence: {dog_probability:.2%})"
+                st.success(result)
+                st.write("It's a cute Dog! Look at those loyal eyes. 🐶")
+            else:
+                result = f"Cat (Confidence: {cat_probability:.2%})"
+                st.success(result)
+                st.write("It's a pretty Cat! Such a majestic feline. 🐱")
+            
+            # Show prediction gauge with the higher confidence value
+            st.write("Prediction Confidence:")
+            confidence = max(cat_probability, dog_probability)
+            st.progress(confidence)
+        except Exception as e:
+            st.error(f"Error during prediction: {str(e)}")
+    else:
+        st.error("Model could not be loaded. Please check the logs for details.")
 
 # Add instructions on how to run the app
 st.sidebar.title("About")
