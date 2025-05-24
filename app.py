@@ -70,18 +70,18 @@ if uploaded_file is not None:
             try:
                 prediction = model.predict(processed_image)
                 
-                # Enhanced debugging information
-                st.write("Raw prediction shape:", prediction.shape)
-                st.write("Raw prediction values:", prediction)
+                # # Enhanced debugging information
+                # st.write("Raw prediction shape:", prediction.shape)
+                # st.write("Raw prediction values:", prediction)
                 
                 # Check if we need to interpret indices differently
                 # Try flipping the interpretation of the indices
                 cat_probability = float(prediction[0][0])
                 dog_probability = float(prediction[0][1])
                 
-                st.write("Interpreted as:")
-                st.write(f"- Class 0 (Cat) probability: {cat_probability:.4f}")
-                st.write(f"- Class 1 (Dog) probability: {dog_probability:.4f}")
+                # st.write("Interpreted as:")
+                # st.write(f"- Class 0 (Cat) probability: {cat_probability:.4f}")
+                # st.write(f"- Class 1 (Dog) probability: {dog_probability:.4f}")
                 
                 # Display results with flipped interpretation
                 if dog_probability > cat_probability:
